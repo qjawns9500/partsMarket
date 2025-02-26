@@ -1,0 +1,121 @@
+# ===================== 공통 설정 =====================
+spring:
+  profiles:
+    active: local  # local / main 변경 가능
+  devtools:
+    livereload:
+      enabled: true
+
+  mvc:
+    pathmatch:
+      matching-strategy: ANT_PATH_MATCHER
+
+  jwt:
+    secret: govlepel@$&  # JWT 시크릿 키
+
+  redis:
+    port: 6000
+    password: tg1234
+    useYn: Y
+    sentinelYn: N
+
+  security:
+    filter:
+      order: 5
+
+  servlet:
+    multipart:
+      max-file-size: 40MB
+      max-request-size: 40MB
+
+  thymeleaf:
+    enabled: true
+    encoding: UTF-8
+    prefix: classpath:templates/
+    suffix: .html
+    cache: false
+
+server:
+  servlet:
+    session:
+      tracking-modes: cookie
+      cookie:
+        name: ADMIN_JSESSIONID
+
+encoding:
+  isAdaptive: false
+  type: advance
+  codec:
+    enabled: false
+
+vod:
+  limit-size: 5000000000
+  host-name: 192.168.0.144
+  uploader-port: 3000
+
+netty:
+  ffmpeg:
+    useYn: Y
+    port: 1934
+  monitor:
+    useYn: Y
+    port: 8089
+
+reconnect:
+  countYn: Y
+  count: 3
+  useYn: true
+
+# ===================== 공통 설정 끝 =====================
+
+---
+# 개발 환경 (local)
+spring:
+  config:
+    activate:
+      on-profile: local
+
+  redis:
+    host: 192.168.0.179  # 개발 Redis 서버
+
+  datasource:
+    driver-class-name: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
+    hikari:
+      jdbc-url: jdbc:log4jdbc:mysql://127.0.0.1:3306/gokams_live?serverTimezone=Asia/Seoul&useSSL=false&autoReconnect=true
+      username: root
+      password:
+
+server:
+  port: 8099  # 개발 환경 포트
+  servlet:
+    context-path: /admin
+
+logging:
+  file:
+    path: D:/IntelliJworkspace/GOKAMS_LIVE_2.1/logs/
+
+---
+# 운영 환경 (main)
+spring:
+  config:
+    activate:
+      on-profile: main
+
+  redis:
+    host: 127.0.0.1  # 운영 Redis 서버
+
+  datasource:
+    driver-class-name: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
+    hikari:
+      jdbc-url: jdbc:log4jdbc:mysql://127.0.0.1:3306/movie?serverTimezone=Asia/Seoul&useSSL=false&autoReconnect=true
+      username: ncloud
+      password:
+
+server:
+  port: 8090  # 운영 환경 포트
+  servlet:
+    context-path: /live
+
+logging:
+  file:
+    path: /home/
