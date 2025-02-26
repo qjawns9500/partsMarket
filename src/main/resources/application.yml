@@ -76,14 +76,14 @@ spring:
       on-profile: local
 
   redis:
-    host: 192.168.0.179  # 개발 Redis 서버
+    host: 127.0.0.1  # 개발 Redis 서버
 
   datasource:
     driver-class-name: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
     hikari:
-      jdbc-url: jdbc:log4jdbc:mysql://127.0.0.1:3306/gokams_live?serverTimezone=Asia/Seoul&useSSL=false&autoReconnect=true
+      jdbc-url: jdbc:log4jdbc:mysql://127.0.0.1:3306/myparts?serverTimezone=Asia/Seoul&useSSL=false&autoReconnect=true
       username: root
-      password:
+      password: rf1234
 
 server:
   port: 8099  # 개발 환경 포트
