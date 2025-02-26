@@ -1,121 +1,38 @@
-# ===================== 공통 설정 =====================
 spring:
   profiles:
-    active: local  # local / main 변경 가능
-  devtools:
-    livereload:
-      enabled: true
+    active: local  # local / prod 변경 가능
 
-  mvc:
-    pathmatch:
-      matching-strategy: ANT_PATH_MATCHER
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/myparts?serverTimezone=Asia/Seoul&useSSL=false&allowPublicKeyRetrieval=true
+    username: root
+    password: rf1234
 
-  jwt:
-    secret: govlepel@$&  # JWT 시크릿 키
-
-  redis:
-    port: 6000
-    password: tg1234
-    useYn: Y
-    sentinelYn: N
-
-  security:
-    filter:
-      order: 5
+    #  HikariCP 설정 (최적화)
+    hikari:
+      pool-name: HikariCP  # 커넥션 풀 이름
+      maximum-pool-size: 10  # 최대 커넥션 개수 (동시 연결 개수)
+      minimum-idle: 2  # 최소 유휴 커넥션 개수
+      idle-timeout: 30000  # (ms) 커넥션 유휴 상태 유지 시간
+      max-lifetime: 1800000  # (ms) 커넥션 최대 수명 (30분)
+      connection-timeout: 10000  # (ms) 커넥션 타임아웃 (10초)
+      auto-commit: true  # 트랜잭션 자동 커밋 여부
 
   servlet:
     multipart:
-      max-file-size: 40MB
-      max-request-size: 40MB
+      max-file-size: 50MB
+      max-request-size: 50MB
 
-  thymeleaf:
-    enabled: true
-    encoding: UTF-8
-    prefix: classpath:templates/
-    suffix: .html
-    cache: false
-
-server:
-  servlet:
-    session:
-      tracking-modes: cookie
-      cookie:
-        name: ADMIN_JSESSIONID
-
-encoding:
-  isAdaptive: false
-  type: advance
-  codec:
-    enabled: false
-
-vod:
-  limit-size: 5000000000
-  host-name: 192.168.0.144
-  uploader-port: 3000
-
-netty:
-  ffmpeg:
-    useYn: Y
-    port: 1934
-  monitor:
-    useYn: Y
-    port: 8089
-
-reconnect:
-  countYn: Y
-  count: 3
-  useYn: true
-
-# ===================== 공통 설정 끝 =====================
-
----
-# 개발 환경 (local)
-spring:
-  config:
-    activate:
-      on-profile: local
-
-  redis:
-    host: 127.0.0.1  # 개발 Redis 서버
-
-  datasource:
-    driver-class-name: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
-    hikari:
-      jdbc-url: jdbc:log4jdbc:mysql://127.0.0.1:3306/myparts?serverTimezone=Asia/Seoul&useSSL=false&autoReconnect=true
-      username: root
-      password: rf1234
-
-server:
-  port: 8099  # 개발 환경 포트
-  servlet:
-    context-path: /admin
+mybatis:
+  mapper-locations: classpath:mapper/**/*.xml
+  configuration:
+    map-underscore-to-camel-case: true  # DB 컬럼 (snake_case) → Java 변수 (camelCase) 자동 변환
+    jdbc-type-for-null: null  # NULL 값을 명시적으로 처리
+    default-fetch-size: 100  # 한 번에 가져올 기본 데이터 개수
+    default-statement-timeout: 30  # SQL 실행 타임아웃 (초)
 
 logging:
-  file:
-    path: D:/IntelliJworkspace/GOKAMS_LIVE_2.1/logs/
-
----
-# 운영 환경 (main)
-spring:
-  config:
-    activate:
-      on-profile: main
-
-  redis:
-    host: 127.0.0.1  # 운영 Redis 서버
-
-  datasource:
-    driver-class-name: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
-    hikari:
-      jdbc-url: jdbc:log4jdbc:mysql://127.0.0.1:3306/movie?serverTimezone=Asia/Seoul&useSSL=false&autoReconnect=true
-      username: ncloud
-      password:
-
-server:
-  port: 8090  # 운영 환경 포트
-  servlet:
-    context-path: /live
-
-logging:
-  file:
-    path: /home/
+  level:
+    root: info
+    '[org.mybatis]': debug  # MyBatis SQL 로그 출력
+    '[com.example.mapper]': trace  # Mapper 패키지 로그 출력
