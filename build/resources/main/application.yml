@@ -50,7 +50,7 @@ encoding:
 
 vod:
   limit-size: 5000000000
-  host-name: 127.0.0.1
+  host-name: 192.168.0.144
   uploader-port: 3000
 
 netty:
